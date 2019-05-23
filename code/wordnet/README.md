@@ -13,3 +13,25 @@ To test a word, run the following on the command-line:
 $ python test_word.py some-word
  - where "some-word" is the word to be tested in this example
  - substitute your own choice of word to be tested
+
+For example:
+- For the word "aberrant":
+- the result would be:
+{
+	'word': 'aberrant',
+	'segments': 'ab+err+ant',
+	'matched_char_count': 8,
+	'unmatched_char_count': 0,
+	'prefix': {
+		'form': 'ab',
+		'meaning': ['away from']
+	},
+	'root': {
+		'form': 'err',
+		'meaning': ['stray']
+	},
+	'suffix': {
+		'form': 'ant',
+		'meaning': ['inclined to', 'tending to']
+	}
+}
