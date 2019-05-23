@@ -117,9 +117,12 @@ def get_suffix_exact_match(found_suffixes, mf_suffix):
 def find_best_entry(strategy_leg, entries, form_array, strategy):
 	"best affix from affixes found, depending on strategy"
 	all_entries = entries.copy()
-	best_key = ""
-	best_form = ""
-	best_len = 0
+	best_entry = {
+		"key": "",
+		"form": "",
+		"len": 0,
+		"meaning": []
+	}
 	if len(form_array) > 0:
 		form = form_array[0]
 		if len(form_array) > 1:
@@ -131,32 +134,37 @@ def find_best_entry(strategy_leg, entries, form_array, strategy):
 			for entryx in entries:
 				entry = entries[entryx]
 				if strategy == "max_len":
-					if entry["len"] > best_len and entry["len"] <= form_len:
-						best_key = entryx
-						best_form = entry["form"]
-						best_len = entry["len"]
+					if entry["len"] > best_entry["len"] and entry["len"] <= form_len:
+						best_entry["key"] = entryx
+						best_entry["form"] = entry["form"]
+						best_entry["len"] = entry["len"]
+						best_entry["meaning"] = entry["meaning"]
 				elif strategy == "left_first":
 					entry_form_ix = form.index(entry["form"])
 					if entry_form_ix < best_ix and entry["len"] <= form_len:
-						best_key = entryx
-						best_form = entry["form"]
-						best_len = entry["len"]
+						best_entry["key"] = entryx
+						best_entry["form"] = entry["form"]
+						best_entry["len"] = entry["len"]
+						best_entry["meaning"] = entry["meaning"]
 						best_ix = entry_form_ix
-			all_entries[best_key]["priority"] = "highest"
-			return best_key, best_form, all_entries[best_key], all_entries
+			all_entries[best_entry["key"]]["priority"] = "highest"
+			return best_entry, all_entries[best_entry["key"]], all_entries
 		else:
-			return "", "", {}, all_entries
+			return {}, {}, all_entries
 	else:
 		if debug > 0:
 			print("find_best_entry: empty form_array")
-		return "", "", {}, all_entries
+		return {}, {}, all_entries
 
 def find_max_entry(strategy_leg, entries, form_array):
 	"best affix from affixes , based on length"
 	all_entries = entries.copy()
-	max_key = ""
-	max_form = ""
-	max_len = 0
+	max_entry = {
+		"key": "",
+		"form": "",
+		"len": 0,
+		"meaning": []
+	}
 	if len(form_array) > 0:
 		if strategy_leg == "prefix":
 			form = form_array[0]
@@ -169,35 +177,37 @@ def find_max_entry(strategy_leg, entries, form_array):
 		if len(entries) > 0:
 			for entryx in entries:
 				entry = entries[entryx]
-				if entry["len"] > max_len and entry["len"] <= form_len:
-					max_key = entryx
-					max_form = entry["form"]
-					max_len = entry["len"]
-			if max_key != "":
-				all_entries[max_key]["priority"] = "highest"
-				return max_key, max_form, all_entries[max_key], all_entries
+				if entry["len"] > max_entry["len"] and entry["len"] <= form_len:
+					max_entry["key"] = entryx
+					max_entry["form"] = entry["form"]
+					max_entry["len"] = entry["len"]
+					max_entry["meaning"] = entry["meaning"]
+			if max_entry["key"] != "":
+				all_entries[max_entry["key"]]["priority"] = "highest"
+				return max_entry, all_entries[max_entry["key"]], all_entries
 			else:
-				return "", "", {}, all_entries
+				return {}, {}, all_entries
 		else:
-			return "", "", {}, all_entries
+			return {}, {}, all_entries
 	else:
 		if debug > 0:
 			print("find_max_entry: empty form_array")
-		return "", "", {}, all_entries
+		return {}, {}, all_entries
 
 def unique_keys(list1):
 	list_set = set(list1)
 	unique_list = (list(list_set))
 	return unique_list
 
-def save_result(leg, xk, xform, x, prior_results, all_entries):
+def save_result(leg, xk_entry, x, prior_results, all_entries):
 	"add to results object"
 	ret_results = prior_results
 	wcp_update = []
 	leg_obj = {
 		"leg": leg,
-		"xk": xk,
-		"form": xform,
+		"xk": xk_entry["key"],
+		"form": xk_entry["form"],
+		"meaning": xk_entry["meaning"],
 		"x": x,
 		"all_entries": all_entries
 	}
@@ -209,19 +219,19 @@ def save_result(leg, xk, xform, x, prior_results, all_entries):
 		ret_results[leg] = [leg_obj]
 
 	for word_segment in ret_results["word_components_potential"]:
-		if xform in word_segment:
-			if len(xform) == len(word_segment):
+		if xk_entry["form"] in word_segment:
+			if len(xk_entry["form"]) == len(word_segment):
 				pass
 			else:
-				word_segment_array = word_segment.split(xform)
+				word_segment_array = word_segment.split(xk_entry["form"])
 				for wsa_element in word_segment_array:
 					if wsa_element != '':
 						wcp_update.append(wsa_element)
 		else:
 			wcp_update.append(word_segment)
 	ret_results["word_components_potential"] = wcp_update
-	ret_results["matched_char_count"] += len(xform)
-	ret_results["unmatched_char_count"] -= len(xform)
+	ret_results["matched_char_count"] += len(xk_entry["form"])
+	ret_results["unmatched_char_count"] -= len(xk_entry["form"])
 	return ret_results
 
 # Based on the intersection of longest found prefixes, suffixes, roots
@@ -237,20 +247,23 @@ def find_likely_entries(prior_results, strategy_tuple, root_strategy):
 		if strategy_leg == "prefix":
 			if len(ret_results["word_components_potential"]) > 0:
 				find_prefixes = find_prefixes_for_word_segment(ret_results["word_components_potential"])
-				max_pxk, max_pxform, max_px, all_rx = find_max_entry(strategy_leg, find_prefixes, ret_results["word_components_potential"])
-				if max_pxk != "":
-					ret_results = save_result("prefix", max_pxk, max_pxform, max_px, ret_results, all_rx)
+				max_entry, max_px, all_rx = find_max_entry(strategy_leg, find_prefixes, ret_results["word_components_potential"])
+				#if max_entry["key"] != "":
+				if len(max_entry) > 0:
+					ret_results = save_result("prefix", max_entry, max_px, ret_results, all_rx)
 		elif strategy_leg == "root":
 			if len(ret_results["word_components_potential"]) > 0:
 				find_roots = find_roots_for_word_segment(ret_results["word_components_potential"])
-				best_rxk, best_rxform, best_rx, all_rx = find_best_entry(strategy_leg, find_roots, ret_results["word_components_potential"], root_strategy)
-				if best_rxk != "":
-					ret_results = save_result("root", best_rxk, best_rxform, best_rx, ret_results, all_rx)
+				best_entry, best_rx, all_rx = find_best_entry(strategy_leg, find_roots, ret_results["word_components_potential"], root_strategy)
+				#if best_entry["key"] != "":
+				if len(max_entry) > 0:
+					ret_results = save_result("root", best_entry, best_rx, ret_results, all_rx)
 		elif strategy_leg == "suffix":
 			find_suffixes = find_suffixes_for_word_segment(ret_results["word_components_potential"])
-			max_sxk, max_sxform, max_sx, all_rx = find_max_entry(strategy_leg, find_suffixes, ret_results["word_components_potential"])
-			if max_sxk != "":
-				ret_results = save_result("suffix", max_sxk, max_sxform, max_sx, ret_results, all_rx)
+			max_entry, max_sx, all_rx = find_max_entry(strategy_leg, find_suffixes, ret_results["word_components_potential"])
+			#if max_entry["key"] != "":
+			if len(max_entry) > 0:
+				ret_results = save_result("suffix", max_entry, max_sx, ret_results, all_rx)
 	return ret_results
 
 def find_entry_in_db(word, strategy, root_strategy):
@@ -408,6 +421,9 @@ def get_results_meaning(results, leg):
 			return []
 	else:
 		return []
+
+def close_neo4j():
+	mdb.close_neo4j()
 
 morphemes_filename = "morphemes.json"
 morphemes_filepath = data_directory_path + morphemes_filename
