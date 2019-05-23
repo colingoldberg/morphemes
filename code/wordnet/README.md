@@ -17,21 +17,11 @@ $ python test_word.py some-word
 For example:
 - For the word "aberrant":
 - the result would be:
-{
-	'word': 'aberrant',
-	'segments': 'ab+err+ant',
-	'matched_char_count': 8,
-	'unmatched_char_count': 0,
-	'prefix': {
-		'form': 'ab',
-		'meaning': ['away from']
-	},
-	'root': {
-		'form': 'err',
-		'meaning': ['stray']
-	},
-	'suffix': {
-		'form': 'ant',
-		'meaning': ['inclined to', 'tending to']
-	}
+{'matched_char_count': 8,
+ 'prefix': {'form': 'ab', 'meaning': ['away from']},
+ 'root': {'form': 'err', 'meaning': ['stray']},
+ 'segments': 'ab+err+ant',
+ 'suffix': {'form': 'ant', 'meaning': ['inclined to', 'tending to']},
+ 'unmatched_char_count': 0,
+ 'word': 'aberrant'
 }
