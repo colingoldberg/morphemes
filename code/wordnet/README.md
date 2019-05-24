@@ -48,3 +48,5 @@ For example:
   'word': 'aberrant'
 }
 ```
+
+Note: An initial test successfully segmented 88% of Wordnet adjectives. The real test is: how many of the results yielded appropriate meanings - the objective of this repository in the first place. Any comments on the validity or otherwise of any results you may get will be appreciated.
