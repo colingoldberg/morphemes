@@ -11,4 +11,6 @@ Entries, grouped by "meaning", are contained in the file morphemes.json in the r
 
 Currently, the Python scripts provided operate on one word at a time, and integrate with the NLTK package.
 
+An way to retrieve results online will soon be available.
+
 Any comments and suggestions are appreciated.
