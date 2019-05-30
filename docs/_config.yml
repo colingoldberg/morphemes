@@ -1,1 +1,12 @@
-theme: jekyll-theme-slate
+# Setup
+name:         Morphemes
+tagline:      Common English morphemes, organized for automated access
+baseurl:      ""
+locale:       "en"
+
+# Gems
+gems:
+  - jekyll-paginate
+
+#Others
+markdown: kramdown
