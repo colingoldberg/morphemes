@@ -1,7 +1,7 @@
 # Setup
 name:         Morphemes
 tagline:      Common English morphemes, organized for automated access
-baseurl:      "https://github.com/colingoldberg/morphemes/blob/master/docs"
+baseurl:      "/morphemes"
 locale:       "en"
 
 # Gems
