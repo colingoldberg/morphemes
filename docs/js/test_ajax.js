@@ -1,11 +1,11 @@
 $.ajax({
     headers: {
-        "Authorization": "Bearer be2d148ef09c15fabd960cac9e79de2d9ec1329a:",
+        //"Authorization": "Bearer be2d148ef09c15fabd960cac9e79de2d9ec1329a:",
         "Accept": "application/json"
     },
     dataType: "json",
     cache: false,
-    url: 'http://162.243.39.95:8005/word_segments?word=abbreviated',
+    url: 'https://morphemes.ritc.io/word_segments?word=abbreviated',
     success: function (data) {
         //console.log('Success:'+data);
         var $select = $('#results');
