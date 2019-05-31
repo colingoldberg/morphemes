@@ -1,5 +1,5 @@
 # Setup
-name:         Morphemes
+name:         Morphemes with Meanings
 tagline:      Common English morphemes, organized for automated access
 baseurl:      "/morphemes"
 locale:       "en"
