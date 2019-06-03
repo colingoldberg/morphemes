@@ -12,7 +12,7 @@ It houses morphemes(prefixes, roots/stems, and suffixes), along with meanings an
 An initial count shows 2400+ groupings, containing 3000+ prefixes, 1000+ roots/stems, and 800+ suffixes.
 
 
-###Prefixes:
+**Prefixes:**
 
 Fields associated with prefixes are as follows:
 * form: the prefix characters as they would exist in a word (eg. "ab")
@@ -26,7 +26,7 @@ Fields associated with prefixes are as follows:
   * ...
 
 
-###Suffixes:
+Suffixes:
 
 Fields associated with suffixes are as follows:
 * form: the suffix characters as they would exist in a word (eg. "able")
@@ -38,7 +38,7 @@ Fields associated with suffixes are as follows:
   * inflectional
 
 
-###Roots/Stems:
+Roots/Stems:
 
 Fields associated with roots/stems are as follows:
 * form: the root/stem characters as they would exist in a word (eg. "fess")
