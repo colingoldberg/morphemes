@@ -13,7 +13,7 @@ Entries, grouped by "meaning", are contained in the dataset morphemes.json (in t
 
 An initial test successfully segmented 88% of Wordnet adjectives. Of course the real test - yet to be determined, is: how many of the results yielded appropriate meanings - the objective of this repository in the first place.
 
-Try it out! Use the form on the right to retrieve results online. Please help improve the dataset by indicating whether the results you get make snse or not.
+Try it out! Use the form on the right to retrieve results online. Please help improve the dataset by indicating whether the results you get make sense or not.
 
 You also have the option of downloading the repo. Currently, the Python scripts provided in the Github repo operate on one word at a time, and integrate with the NLTK Wordnet package.
 
