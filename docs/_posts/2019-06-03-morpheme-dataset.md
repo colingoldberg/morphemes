@@ -26,7 +26,7 @@ Fields associated with prefixes are as follows:
   * ...
 
 
-Suffixes:
+**Suffixes:**
 
 Fields associated with suffixes are as follows:
 * form: the suffix characters as they would exist in a word (eg. "able")
@@ -38,7 +38,7 @@ Fields associated with suffixes are as follows:
   * inflectional
 
 
-Roots/Stems:
+**Roots/Stems:**
 
 Fields associated with roots/stems are as follows:
 * form: the root/stem characters as they would exist in a word (eg. "fess")
